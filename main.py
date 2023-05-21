@@ -1,6 +1,8 @@
 import requests
 import os
 import socket
+import time
+import datetime
 discordWebhookURL = ''
 freemyiptoken = ''
 freemyipURL = '' # ex YOUR_DOMAIN.freemyip.com
@@ -22,12 +24,37 @@ def ipcheck():
             update = requests.get('https://freemyip.com/update?token=' + freemyiptoken + '&domain=' + freemyipURL)
             if update.status_code == 200:
                 print('FreeMyIP updated!')
+                discordUpdate(hazip.text, 'success')
             else:
                 print('FreeMyIP update failed!')
+                discordUpdate(hazip.text, 'failed')
 
+def discordUpdate(newIP, status):
+    # timestamp
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
+    # send a discord notification
+    if status == 'success':
+        title = '**IP Address has been changed**'
+        color = 16777215 # white
+    elif status == 'failed':
+        title = '**IP Address change failed**'
+        color = 0xff0000 # red
+    data = {
+        "username" : "FreeMyIP Bot",
+    }
+    data["embeds"] = [
+        {
+            "title" : title,
+            "description" : "**New IP: " + newIP + "**\n\n" + str(timestamp),
+            "color" : color
+        }
+    ]
+    print(requests.post(discordWebhookURL, json=data))
 
 def main():
-    ipcheck()
+    while True:
+        ipcheck()
+        time.sleep(checkInterval)
 
 if __name__ == '__main__':
     main()
