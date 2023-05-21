@@ -19,7 +19,9 @@ def ipcheck():
         freemyipaddr = socket.gethostbyname(freemyipURL)
         print('FreeMyIP IP: ' + freemyipaddr)
         # if the IP addresses are different, update FreeMyIP
-        if ipaddr != freemyipaddr:
+        if ipaddr == (freemyipaddr + '\n'):
+            print('IP addresses match')
+        else:
             print('Updating FreeMyIP...')
             update = requests.get('https://freemyip.com/update?token=' + freemyiptoken + '&domain=' + freemyipURL)
             if update.status_code == 200:
