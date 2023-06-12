@@ -26,12 +26,12 @@ def ipcheck():
             update = requests.get('https://freemyip.com/update?token=' + freemyiptoken + '&domain=' + freemyipURL)
             if update.status_code == 200:
                 print('FreeMyIP updated!')
-                discordUpdate(hazip.text, 'success')
+                discordUpdate(hazip.text, freemyipaddr, 'success')
             else:
                 print('FreeMyIP update failed!')
-                discordUpdate(hazip.text, 'failed')
+                discordUpdate(hazip.text, freemyipaddr, 'failed')
 
-def discordUpdate(newIP, status):
+def discordUpdate(newIP, oldIP, status):
     # timestamp
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
     # send a discord notification
@@ -47,7 +47,7 @@ def discordUpdate(newIP, status):
     data["embeds"] = [
         {
             "title" : title,
-            "description" : "**New IP: " + newIP + "**\n\n" + str(timestamp),
+            "description" : "**New IP: " + newIP + "**\n" + "**Old IP: " + oldIP + "**\n\n" + str(timestamp),
             "color" : color
         }
     ]
