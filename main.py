@@ -47,7 +47,7 @@ def discordUpdate(newIP, oldIP, status):
     data["embeds"] = [
         {
             "title" : title,
-            "description" : "**New IP: " + newIP + "**\n" + "**Old IP: " + oldIP + "**\n\n" + str(timestamp),
+            "description" : "**New IP: " + newIP + "**" + "**Old IP: " + oldIP + "**\n\n" + str(timestamp),
             "color" : color
         }
     ]
