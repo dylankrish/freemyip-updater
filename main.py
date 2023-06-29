@@ -13,23 +13,25 @@ def ipcheck():
     hazip = requests.get('https://icanhazip.com/')
     if hazip.status_code == 200:
         ipaddr = hazip.text
+        # truncate the newline character
+        ipaddr = ipaddr[:-1]
         print('Current IP: ' + ipaddr)
         # check your IP address from FreeMyIP
         # perform a DNS lookup on the URL to get the IP address
         freemyipaddr = socket.gethostbyname(freemyipURL)
         print('FreeMyIP IP: ' + freemyipaddr)
         # if the IP addresses are different, update FreeMyIP
-        if ipaddr == (freemyipaddr + '\n'):
+        if ipaddr == freemyipaddr:
             print('IP addresses match')
         else:
             print('Updating FreeMyIP...')
             update = requests.get('https://freemyip.com/update?token=' + freemyiptoken + '&domain=' + freemyipURL)
             if update.status_code == 200:
                 print('FreeMyIP updated!')
-                discordUpdate(hazip.text, freemyipaddr, 'success')
+                discordUpdate(ipaddr, freemyipaddr, 'success')
             else:
                 print('FreeMyIP update failed!')
-                discordUpdate(hazip.text, freemyipaddr, 'failed')
+                discordUpdate(ipaddr, freemyipaddr, 'failed')
 
 def discordUpdate(newIP, oldIP, status):
     # timestamp
